@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.google.android</groupId>
-	<artifactId>android</artifactId>
-	<version>android-2.1_r1</version>
+	<groupId>junit</groupId>
+	<artifactId>junit</artifactId>
+	<version>android-junit-2.1_r1</version>
 	<packaging>jar</packaging>
-	<name>Google Android Library</name>
+	<name>Google Android JUnit Library</name>
 	<description>A library jar that provides APIs for Applications written for the Google Android Platform.</description>
 	<url>http://source.android.com/</url>
 	<inceptionYear>2008</inceptionYear>	
@@ -45,11 +45,4 @@
 
 	</build>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>3.8.2</version>
-		</dependency>
-	</dependencies>
 </project>

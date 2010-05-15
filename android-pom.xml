@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.google.android</groupId>
+	<artifactId>android</artifactId>
+	<version>android-2.1_r1</version>
+	<packaging>jar</packaging>
+	<name>Google Android Library</name>
+	<description>A library jar that provides APIs for Applications written for the Google Android Platform.</description>
+	<url>http://source.android.com/</url>
+	<inceptionYear>2008</inceptionYear>	
+	<licenses>
+		<license>
+			<name>Apache 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<comments>
+				While the EULA for the Android SDK restricts distribution of those binaries, the source code 
+				is licensed under Apache 2.0 which allows compiling binaries from source and then distributing
+				those versions. 
+			</comments>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://android.git.kernel.org/</url>
+		<connection>git://android.git.kernel.org/platform/manifest.git</connection>
+	</scm>
+	<developers>
+		<developer>
+			<name>The Android Open Source Projects</name>
+		</developer>
+	</developers>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3</version>
+				<configuration>
+					<compilerVersion>1.5</compilerVersion>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<excludes>
+						<exclude>**/AndroidTestCase.java</exclude>
+						<exclude>**/InstrumentationTestCase.java</exclude>
+						<exclude>**/*FailedToCreateTest*</exclude>
+					</excludes>
+				</configuration>
+
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>android-junit-2.1_r1</version>
+		</dependency>
+	</dependencies>
+</project>

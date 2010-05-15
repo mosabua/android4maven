@@ -1,31 +1,42 @@
-#! /bin/bash
+#! /bin/bash  
 
 #
 # This script builds the android.jar / sdk using Google tools, then extracts the source code required to 
-# build the maven artifact, and places it into a newly created maven project.  This will remove the 
-# mavenProjectFolder, so don't set it to something you want to keep.
+# build the maven artifact, and places it into several newly created maven projects. 
 #
 
-droidFolder=/home/manningr/mydroid
-mavenProjectFolder=/home/manningr/projects/android-2.1_r1
+export droidFolder=/home/manningr/mydroid
 export branchtag=android-2.1_r1
-
-droidOutFolder=/home/manningr/mydroid/out
-mavenSrcFolder=$mavenProjectFolder/src/main/java
-mavenResourcesFolder=$mavenProjectFolder/src/main/resources
-mavenTestSrcFolder=$mavenProjectFolder/src/test/java
-droidSrcFolder=$droidFolder/out/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/src
-pomfile=`pwd`/pom.xml
-
-echo "Removing $mavenProjectFolder"
-rm -rf $mavenProjectFolder
-mkdir -p $mavenSrcFolder
-mkdir -p $mavenResourcesFolder
-mkdir -p $mavenTestSrcFolder/android
+export projectsFolder=`pwd`/target
+export androidProjectFolder=$projectsFolder/android-$branchtag
+export junitProjectFolder=$projectsFolder/android-junit-$branchtag
+export droidOutFolder=$droidFolder/out
+export androidSrcFolder=$androidProjectFolder/src/main/java
+export androidResourcesFolder=$androidProjectFolder/src/main/resources
+export androidTestSrcFolder=$androidProjectFolder/src/test/java
+export junitSrcFolder=$junitProjectFolder/src/main/java
+export junitResourcesFolder=$junitProjectFolder/src/main/resources
 
 
-fileToPatch=$droidFolder/build/core/base_rules.mk
-needToPatch=`grep '^$(error' $fileToPatch | wc -l`
+export droidSrcFolder=$droidFolder/out/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/src
+export androidPomfile=`pwd`/android-pom.xml
+export junitPomFile=`pwd`/junit-pom.xml
+
+echo "Removing $projectsFolder"
+rm -rf $projectsFolder
+
+echo "Setting up Android Maven project folders"
+mkdir -p $androidSrcFolder
+mkdir -p $androidResourcesFolder
+mkdir -p $androidTestSrcFolder/android
+
+echo "Setting up Android-JUnit Maven project folders"
+mkdir -p $junitSrcFolder
+mkdir -p $junitResourcesFolder
+
+
+export fileToPatch=$droidFolder/build/core/base_rules.mk
+export needToPatch=`grep '^$(error' $fileToPatch | wc -l`
 
 if [ $needToPatch -eq 1 ]; then
 	if [ ! -e $fileToPatch.bak ]; then
@@ -38,41 +49,50 @@ if [ $needToPatch -eq 1 ]; then
 fi
 
 cd $droidFolder
- . ./build/envsetup.sh
+. ./build/envsetup.sh
 repo forall -c git checkout $branchtag
 mm sdk
 
-echo "Copying source files"
-cp -r $droidSrcFolder/android $mavenSrcFolder
-cp -r $droidSrcFolder/android/test $mavenTestSrcFolder/android
-cp -r $droidSrcFolder/com $mavenSrcFolder
-cp -r $droidSrcFolder/dalvik $mavenSrcFolder
-cp -r $droidSrcFolder/java $mavenSrcFolder
-cp -r $droidSrcFolder/javax $mavenSrcFolder
-cp -r $droidSrcFolder/org $mavenSrcFolder
+echo "Copying source files from $androidSrcFolder"
+cp -r $droidSrcFolder/android $androidSrcFolder
+cp -r $droidSrcFolder/android/test $androidTestSrcFolder/android
+cp -r $droidSrcFolder/com $androidSrcFolder
+cp -r $droidSrcFolder/dalvik $androidSrcFolder
+cp -r $droidSrcFolder/junit $junitSrcFolder
+
+# At some point these should also be split out like JUnit.
+cp -r $droidSrcFolder/java $androidSrcFolder
+cp -r $droidSrcFolder/javax $androidSrcFolder
+cp -r $droidSrcFolder/org $androidSrcFolder
 
 echo "Copying resources files"
-cp -r $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/res $mavenResourcesFolder
-rm -rf $mavenResourcesFolder/res/raw-ar
-rm -rf $mavenResourcesFolder/res/raw-da
-rm -rf $mavenResourcesFolder/res/raw-fi
-rm -rf $mavenResourcesFolder/res/raw-hu
-rm -rf $mavenResourcesFolder/res/raw-iw
-rm -rf $mavenResourcesFolder/res/raw-pt-BR
-rm -rf $mavenResourcesFolder/res/raw-th
-rm -rf $mavenResourcesFolder/res/raw-tr
+cp -r $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/res $androidResourcesFolder
+rm -rf $androidResourcesFolder/res/raw-ar
+rm -rf $androidResourcesFolder/res/raw-da
+rm -rf $androidResourcesFolder/res/raw-fi
+rm -rf $androidResourcesFolder/res/raw-hu
+rm -rf $androidResourcesFolder/res/raw-iw
+rm -rf $androidResourcesFolder/res/raw-pt-BR
+rm -rf $androidResourcesFolder/res/raw-th
+rm -rf $androidResourcesFolder/res/raw-tr
 
-cp -r $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/assets $mavenResourcesFolder
-cp $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/resources.arsc $mavenResourcesFolder
+cp -r $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/assets $androidResourcesFolder
+cp $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/resources.arsc $androidResourcesFolder
 
 platform=`ls $droidOutFolder/host/linux-x86/sdk/android-sdk_eng."$USERNAME"_linux-x86/platforms`
-cp -r $droidOutFolder/host/linux-x86/sdk/android-sdk_eng."$USERNAME"_linux-x86/platforms/"$platform"/data/res/drawable-hdpi $mavenResourcesFolder/res
-cp $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/AndroidManifest.xml $mavenResourcesFolder
+cp -r $droidOutFolder/host/linux-x86/sdk/android-sdk_eng."$USERNAME"_linux-x86/platforms/"$platform"/data/res/drawable-hdpi $androidResourcesFolder/res
+cp $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/AndroidManifest.xml $androidResourcesFolder
 
-echo "Copying pom file ($pomfile) to $mavenProjectFolder"
-cp $pomfile $mavenProjectFolder/pom.xml
-perl -pi -e "s/\@VERSION\@/$branchtag/" $mavenProjectFolder/pom.xml
+echo "Copying in pom files ($androidPomfile and $junitPomFile)"
+cp $androidPomfile $androidProjectFolder/pom.xml
+perl -pi -e "s/\@VERSION\@/$branchtag/" $androidProjectFolder/pom.xml
 
-cd $mavenProjectFolder
+cp $junitPomFile $junitProjectFolder/pom.xml
+perl -pi -e "s/\@VERSION\@/$branchtag/" $junitProjectFolder/pom.xml
+
+cd $junitProjectFolder
+mvn clean install
+
+cd $androidProjectFolder
 mvn clean install
 
