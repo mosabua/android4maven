@@ -5,6 +5,7 @@
 # build the maven artifact, and places it into several newly created maven projects. 
 #
 
+
 export droidFolder=/home/manningr/mydroid
 export branchtag=android-2.1_r1
 export projectsFolder=`pwd`/target
@@ -48,10 +49,12 @@ if [ $needToPatch -eq 1 ]; then
 	perl -pi -e 's/^\$\(error/\#\$\(error/' $fileToPatch
 fi
 
-cd $droidFolder
-. ./build/envsetup.sh
-repo forall -c git checkout $branchtag
-mm sdk
+if [ "$1" != "-skipCompile" ]; then
+	cd $droidFolder
+	. ./build/envsetup.sh
+	repo forall -c git checkout $branchtag
+	mm sdk
+fi;
 
 echo "Copying source files from $androidSrcFolder"
 cp -r $droidSrcFolder/android $androidSrcFolder
@@ -81,6 +84,7 @@ cp $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_interm
 
 platform=`ls $droidOutFolder/host/linux-x86/sdk/android-sdk_eng."$USERNAME"_linux-x86/platforms`
 cp -r $droidOutFolder/host/linux-x86/sdk/android-sdk_eng."$USERNAME"_linux-x86/platforms/"$platform"/data/res/drawable-hdpi $androidResourcesFolder/res
+cp -r $droidOutFolder/host/linux-x86/sdk/android-sdk_eng."$USERNAME"_linux-x86/platforms/"$platform"/data/res/drawable-land-hdpi $androidResourcesFolder/res
 cp $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/AndroidManifest.xml $androidResourcesFolder
 
 echo "Copying in pom files ($androidPomfile and $junitPomFile)"
