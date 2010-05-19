@@ -63,6 +63,7 @@ fi;
 
 echo "Copying source files from $androidSrcFolder"
 cp -r $droidSrcFolder/android $androidSrcFolder
+rm -rf $androidSrcFolder/android/test
 cp -r $droidSrcFolder/android/test $androidTestSrcFolder/android
 cp -r $droidSrcFolder/com $androidSrcFolder
 cp -r $droidSrcFolder/dalvik $androidSrcFolder
