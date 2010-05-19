@@ -11,17 +11,20 @@ export branchtag=android-2.1_r1
 export projectsFolder=`pwd`/target
 export androidProjectFolder=$projectsFolder/android-$branchtag
 export junitProjectFolder=$projectsFolder/android-junit-$branchtag
+export khronosProjectFolder=$projectsFolder/khronos-$branchtag
 export droidOutFolder=$droidFolder/out
 export androidSrcFolder=$androidProjectFolder/src/main/java
 export androidResourcesFolder=$androidProjectFolder/src/main/resources
 export androidTestSrcFolder=$androidProjectFolder/src/test/java
 export junitSrcFolder=$junitProjectFolder/src/main/java
 export junitResourcesFolder=$junitProjectFolder/src/main/resources
+export khronosSrcFolder=$khronosProjectFolder/src/main/java
 
 
 export droidSrcFolder=$droidFolder/out/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/src
 export androidPomfile=`pwd`/android-pom.xml
 export junitPomFile=`pwd`/junit-pom.xml
+export khronosPomFile=`pwd`/khronos-pom.xml
 
 echo "Removing $projectsFolder"
 rm -rf $projectsFolder
@@ -35,6 +38,8 @@ echo "Setting up Android-JUnit Maven project folders"
 mkdir -p $junitSrcFolder
 mkdir -p $junitResourcesFolder
 
+echo "Setting up Javax-Crypto Maven project folder"
+mkdir -p $khronosSrcFolder/javax
 
 export fileToPatch=$droidFolder/build/core/base_rules.mk
 export needToPatch=`grep '^$(error' $fileToPatch | wc -l`
@@ -64,9 +69,25 @@ cp -r $droidSrcFolder/dalvik $androidSrcFolder
 cp -r $droidSrcFolder/junit $junitSrcFolder
 
 # At some point these should also be split out like JUnit.
-cp -r $droidSrcFolder/java $androidSrcFolder
-cp -r $droidSrcFolder/javax $androidSrcFolder
-cp -r $droidSrcFolder/org $androidSrcFolder
+#cp -r $droidSrcFolder/java $androidSrcFolder
+#cp -r $droidSrcFolder/javax $androidSrcFolder
+# These packages are included in the JDK
+rm -rf $androidSrcFolder/javax/crypto
+rm -rf $androidSrcFolder/javax/microedition
+rm -rf $androidSrcFolder/javax/net
+rm -rf $androidSrcFolder/javax/sql
+rm -rf $androidSrcFolder/javax/security
+rm -rf $androidSrcFolder/javax/xml
+
+cp -r $droidSrcFolder/javax/microedition $khronosSrcFolder/javax
+
+#cp -r $droidSrcFolder/javax/crypto $cryptoSrcFolder/javax
+#cp -r $droidSrcFolder/org $androidSrcFolder
+#rm -rf $androidSrcFolder/org/apache/commons/logging
+#rm -rf $androidSrcFolder/org/apache/http
+#rm -rf $androidSrcFolder/org/w3c
+#rm -rf $androidSrcFolder/org/xml
+#rm -rf $androidSrcFolder/org/xmlpull
 
 echo "Copying resources files"
 cp -r $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/res $androidResourcesFolder
@@ -94,7 +115,13 @@ perl -pi -e "s/\@VERSION\@/$branchtag/" $androidProjectFolder/pom.xml
 cp $junitPomFile $junitProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$branchtag/" $junitProjectFolder/pom.xml
 
+cp $khronosPomFile $khronosProjectFolder/pom.xml
+perl -pi -e "s/\@VERSION\@/$branchtag/" $khronosProjectFolder/pom.xml
+
 cd $junitProjectFolder
+mvn clean install
+
+cd $khronosProjectFolder
 mvn clean install
 
 cd $androidProjectFolder
