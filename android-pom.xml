@@ -74,7 +74,38 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>android-junit-2.1_r1</version>
+			<version>3.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- org.apache.commons.logging -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.1.1</version>
+		</dependency>		
+		<!-- org.apache.http.* -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.0.1</version>
+		</dependency>
+		<!-- javax.microedition.khronos.* -->
+		<dependency>
+			<groupId>org.khronos</groupId>
+			<artifactId>opengl-api</artifactId>
+			<version>gl1.1-android-2.1_r1</version>
+		</dependency>
+		<!-- org.xml.sax.*, org.w3c.dom.* -->
+		<dependency>
+			<groupId>xerces</groupId>
+			<artifactId>xmlParserAPIs</artifactId>
+			<version>2.6.2</version>
+		</dependency>
+		<!-- org.xmlpull.v1.* -->
+		<dependency>
+			<groupId>xpp3</groupId>
+			<artifactId>xpp3</artifactId>
+			<version>1.1.4c</version>
 		</dependency>
 	</dependencies>
 </project>
