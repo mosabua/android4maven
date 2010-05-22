@@ -7,7 +7,16 @@
 
 
 export droidFolder=/home/manningr/mydroid
+
+# android-3
+#export branchtag=android-1.5r3
+# android-4
+#export branchtag=android-1.6_r2
+# android-6
+#export branchtag=android-2.0.1_r1
+# android-7
 export branchtag=android-2.1_r1
+
 export projectsFolder=`pwd`/target
 export androidProjectFolder=$projectsFolder/android-$branchtag
 export junitProjectFolder=$projectsFolder/android-junit-$branchtag
@@ -41,25 +50,31 @@ mkdir -p $junitResourcesFolder
 echo "Setting up Javax-Crypto Maven project folder"
 mkdir -p $khronosSrcFolder/javax
 
-export fileToPatch=$droidFolder/build/core/base_rules.mk
-export needToPatch=`grep '^$(error' $fileToPatch | wc -l`
-
-if [ $needToPatch -eq 1 ]; then
-	if [ ! -e $fileToPatch.bak ]; then
-		timestamp=`date '+%Y%m%d-%k%M%S'`
-		echo "Backing up $fileToPatch to $fileToPatch.$timestamp"
-		cp $fileToPatch $fileToPatch.$timestamp
-	fi
-	echo "Applying patch to $fileToPatch" 
-	perl -pi -e 's/^\$\(error/\#\$\(error/' $fileToPatch
-fi
 
 if [ "$1" != "-skipCompile" ]; then
 	cd $droidFolder
+        rm -rf out
 	. ./build/envsetup.sh
 	repo forall -c git checkout $branchtag
+	export fileToPatch=$droidFolder/build/core/base_rules.mk
+	export needToPatch=`grep '^$(error' $fileToPatch | wc -l`
+
+	if [ $needToPatch -eq 1 ]; then
+		if [ ! -e $fileToPatch.bak ]; then
+			timestamp=`date '+%Y%m%d-%k%M%S'`
+			echo "Backing up $fileToPatch to $fileToPatch.$timestamp"
+			cp $fileToPatch $fileToPatch.$timestamp
+		fi
+		echo "Applying patch to $fileToPatch" 
+		perl -pi -e 's/^\$\(error/\#\$\(error/' $fileToPatch
+	fi
+
 	mm sdk
+else
+    echo "Rebuilding tag=$branchtag"
 fi;
+
+
 
 echo "Copying source files from $androidSrcFolder"
 cp -r $droidSrcFolder/android $androidSrcFolder

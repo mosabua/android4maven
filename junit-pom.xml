@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>junit</groupId>
 	<artifactId>junit</artifactId>
-	<version>junit-android-2.1_r1</version>
+	<version>@VERSION@</version>
 	<packaging>jar</packaging>
 	<name>Google Android JUnit Library</name>
 	<description>The Android implementation of JUnit for the Google Android SDK.</description>

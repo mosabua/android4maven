@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.khronos</groupId>
 	<artifactId>opengl-api</artifactId>
-	<version>gl1.1-android-2.1_r1</version>
+	<version>gl1.1-@VERSION@</version>
 	<packaging>jar</packaging>
 	<name>Google Android Java ME Library (Khronos)</name>
 	<description>The Android implementation of Khronos OpenGL Spec for the Google Android SDK.</description>
