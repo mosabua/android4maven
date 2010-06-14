@@ -9,31 +9,32 @@
 export droidFolder=/home/manningr/mydroid
 
 # android-3
-#export branchtag=android-1.5r3
+export branchtag=android-1.5r3
 # android-4
 #export branchtag=android-1.6_r2
 # android-6
 #export branchtag=android-2.0.1_r1
 # android-7
-export branchtag=android-2.1_r1
+#export branchtag=android-2.1_r1
 
 export projectsFolder=`pwd`/target
 export androidProjectFolder=$projectsFolder/android-$branchtag
 export junitProjectFolder=$projectsFolder/android-junit-$branchtag
 export khronosProjectFolder=$projectsFolder/khronos-$branchtag
+export androidTestProjectFolder=$projectsFolder/android-test-$branchtag
 export droidOutFolder=$droidFolder/out
 export androidSrcFolder=$androidProjectFolder/src/main/java
 export androidResourcesFolder=$androidProjectFolder/src/main/resources
-export androidTestSrcFolder=$androidProjectFolder/src/test/java
 export junitSrcFolder=$junitProjectFolder/src/main/java
 export junitResourcesFolder=$junitProjectFolder/src/main/resources
 export khronosSrcFolder=$khronosProjectFolder/src/main/java
-
+export androidTestSrcFolder=$androidTestProjectFolder/src/main/java
 
 export droidSrcFolder=$droidFolder/out/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/src
 export androidPomfile=`pwd`/android-pom.xml
 export junitPomFile=`pwd`/junit-pom.xml
 export khronosPomFile=`pwd`/khronos-pom.xml
+export androidTestPomFile=`pwd`/android-test-pom.xml
 
 echo "Removing $projectsFolder"
 rm -rf $projectsFolder
@@ -41,7 +42,11 @@ rm -rf $projectsFolder
 echo "Setting up Android Maven project folders"
 mkdir -p $androidSrcFolder
 mkdir -p $androidResourcesFolder
+
+
+echo "Setting up Android Test Maven project folders"
 mkdir -p $androidTestSrcFolder/android
+
 
 echo "Setting up Android-JUnit Maven project folders"
 mkdir -p $junitSrcFolder
@@ -55,7 +60,7 @@ if [ "$1" != "-skipCompile" ]; then
 	cd $droidFolder
         rm -rf out
 	. ./build/envsetup.sh
-	repo forall -c git checkout $branchtag
+	#repo forall -c git checkout $branchtag
 	export fileToPatch=$droidFolder/build/core/base_rules.mk
 	export needToPatch=`grep '^$(error' $fileToPatch | wc -l`
 
@@ -134,6 +139,9 @@ perl -pi -e "s/\@VERSION\@/$branchtag/" $junitProjectFolder/pom.xml
 cp $khronosPomFile $khronosProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$branchtag/" $khronosProjectFolder/pom.xml
 
+cp $androidTestPomFile $androidTestProjectFolder/pom.xml
+perl -pi -e "s/\@VERSION\@/$branchtag/" $androidTestProjectFolder/pom.xml
+
 cd $junitProjectFolder
 mvn clean install
 
@@ -143,3 +151,5 @@ mvn clean install
 cd $androidProjectFolder
 mvn clean install
 
+cd $androidTestProjectFolder
+mvn clean install
