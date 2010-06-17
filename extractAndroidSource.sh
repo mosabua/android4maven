@@ -2,20 +2,37 @@
 
 #
 # This script builds the android.jar / sdk using Google tools, then extracts the source code required to 
-# build the maven artifact, and places it into several newly created maven projects. 
+# build the maven artifact, and places it into several newly created maven projects. It supports one
+# optional argument: "-skipCompile".  When "-skipCompile" is given as an argument, this script will not
+# attempt to build android (which can take hours), but assumes it has already been built and proceeds
+# to collect the source and resource files from the droidFolder tree.
 #
 
-
+# Where was the android repo created and sync'd
 export droidFolder=/home/manningr/mydroid
 
-# android-3
-export branchtag=android-1.5r3
-# android-4
-#export branchtag=android-1.6_r2
-# android-6
-#export branchtag=android-2.0.1_r1
-# android-7
-#export branchtag=android-2.1_r1
+# This is the only version that needs to be manually set, based on the tag that was used during git sync
+# The key tags by platform (see source.properties in the Android SDK) are:
+#
+#    android-3 : 1.5_r4
+#    android-4 : 1.6_r2
+#    android-6 : 2.0.1_r1
+#    android-7 : 2.1_r1
+export pomVersion=1.5_r3
+
+export branchVersion=$pomVersion
+export isOneDotFive=`echo pomVersion | grep 1.5 | wc -l`
+
+# Google is a bit inconsistent with their git repo tags, so here we remove the "_", but 
+# only if the branch version was a "1.5" release. All others follow a convention which 
+# places and underscore (_) between the major version and what is presumably the 
+# maintenance release number.  In any case, we want the pom version to have an underscore 
+# between the major version (e.g. 1.5) and the maintenance release (r4)
+if [ $isOneDotFive = "1" ]; then
+	$branchVersion=`echo 1.5_r4 | sed s/_//`
+fi
+
+export branchtag=android-$branchVersion
 
 export projectsFolder=`pwd`/target
 export androidProjectFolder=$projectsFolder/android-$branchtag
@@ -35,6 +52,8 @@ export androidPomfile=`pwd`/android-pom.xml
 export junitPomFile=`pwd`/junit-pom.xml
 export khronosPomFile=`pwd`/khronos-pom.xml
 export androidTestPomFile=`pwd`/android-test-pom.xml
+
+
 
 echo "Removing $projectsFolder"
 rm -rf $projectsFolder
@@ -131,16 +150,16 @@ cp $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_interm
 
 echo "Copying in pom files ($androidPomfile and $junitPomFile)"
 cp $androidPomfile $androidProjectFolder/pom.xml
-perl -pi -e "s/\@VERSION\@/$branchtag/" $androidProjectFolder/pom.xml
+perl -pi -e "s/\@VERSION\@/$pomVersion/" $androidProjectFolder/pom.xml
 
 cp $junitPomFile $junitProjectFolder/pom.xml
-perl -pi -e "s/\@VERSION\@/$branchtag/" $junitProjectFolder/pom.xml
+perl -pi -e "s/\@VERSION\@/$pomVersion/" $junitProjectFolder/pom.xml
 
 cp $khronosPomFile $khronosProjectFolder/pom.xml
-perl -pi -e "s/\@VERSION\@/$branchtag/" $khronosProjectFolder/pom.xml
+perl -pi -e "s/\@VERSION\@/$pomVersion/" $khronosProjectFolder/pom.xml
 
 cp $androidTestPomFile $androidTestProjectFolder/pom.xml
-perl -pi -e "s/\@VERSION\@/$branchtag/" $androidTestProjectFolder/pom.xml
+perl -pi -e "s/\@VERSION\@/$pomVersion/" $androidTestProjectFolder/pom.xml
 
 cd $junitProjectFolder
 mvn clean install
