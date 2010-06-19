@@ -8,8 +8,6 @@
 # to collect the source and resource files from the droidFolder tree.
 #
 
-# Where was the android repo created and sync'd
-export droidFolder=/home/manningr/mydroid
 
 # This is the only version that needs to be manually set, based on the tag that was used during git sync
 # The key tags by platform (see source.properties in the Android SDK) are:
@@ -18,7 +16,10 @@ export droidFolder=/home/manningr/mydroid
 #    android-4 : 1.6_r2
 #    android-6 : 2.0.1_r1
 #    android-7 : 2.1_r1
-export pomVersion=1.5_r3
+export pomVersion=2.1_r2
+
+# Where was the android repo created and sync'd
+export droidFolder=/home/manningr/mydroid-$pomVersion
 
 export branchVersion=$pomVersion
 export isOneDotFive=`echo pomVersion | grep 1.5 | wc -l`
@@ -34,7 +35,7 @@ fi
 
 export branchtag=android-$branchVersion
 
-export projectsFolder=`pwd`/target
+export projectsFolder=`pwd`/target-$pomVersion
 export androidProjectFolder=$projectsFolder/android-$branchtag
 export junitProjectFolder=$projectsFolder/android-junit-$branchtag
 export khronosProjectFolder=$projectsFolder/khronos-$branchtag
