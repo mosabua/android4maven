@@ -20,12 +20,20 @@
 export branchtag=android-2.1_r1
 export platform=android-7
 
+sdkJar=/opt/android-sdk-linux_86/platforms/$platform/android.jar
+sdkJarContents=$sdkJar.extracted
 
-sdkJarContents=/opt/android-sdk-linux_86/platforms/$platform/android.jar.extracted
+if [ ! -d "$sdkJarContents" ]; then
+	mkdir android.jar.extracted
+    	cd ./android.jar.extracted
+        jar -xvf $sdkJar
+	cd ..
+	mv android.jar.extracted "$sdkJarContents"
+fi
 
 rm -rf /tmp/android.jar.extracted
 mkdir  /tmp/android.jar.extracted
-cp ./target/android-$branchtag/target/android-$branchtag.jar /tmp/android.jar
+cp ./target/android-$branchtag/target/$branchtag.jar /tmp/android.jar
 cd  /tmp/android.jar.extracted
 jar -xvf /tmp/android.jar
 
