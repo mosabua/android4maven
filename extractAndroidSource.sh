@@ -16,7 +16,7 @@
 #    android-4 : 1.6_r2
 #    android-6 : 2.0.1_r1
 #    android-7 : 2.1_r1
-export pomVersion=2.1_r2
+export pomVersion=2.2
 
 # Where was the android repo created and sync'd
 export droidFolder=/home/manningr/mydroid-$pomVersion
@@ -80,20 +80,6 @@ if [ "$1" != "-skipCompile" ]; then
 	cd $droidFolder
         rm -rf out
 	. ./build/envsetup.sh
-	#repo forall -c git checkout $branchtag
-	export fileToPatch=$droidFolder/build/core/base_rules.mk
-	export needToPatch=`grep '^$(error' $fileToPatch | wc -l`
-
-	if [ $needToPatch -eq 1 ]; then
-		if [ ! -e $fileToPatch.bak ]; then
-			timestamp=`date '+%Y%m%d-%k%M%S'`
-			echo "Backing up $fileToPatch to $fileToPatch.$timestamp"
-			cp $fileToPatch $fileToPatch.$timestamp
-		fi
-		echo "Applying patch to $fileToPatch" 
-		perl -pi -e 's/^\$\(error/\#\$\(error/' $fileToPatch
-	fi
-
 	mm sdk
 else
     echo "Rebuilding tag=$branchtag"
