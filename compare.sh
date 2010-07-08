@@ -17,7 +17,7 @@
 #export platform=android-6
  
 # android-7
-export branchtag=android-2.1_r1
+export branchtag=android-2.1_r2
 export platform=android-7
 
 sdkJar=/opt/android-sdk-linux_86/platforms/$platform/android.jar

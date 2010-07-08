@@ -16,7 +16,7 @@
 #    android-4 : 1.6_r2
 #    android-6 : 2.0.1_r1
 #    android-7 : 2.1_r1
-export pomVersion=1.6_r2
+export pomVersion=2.2
 
 # Where was the android repo created and sync'd
 export droidFolder=/home/manningr/mydroid-$pomVersion
@@ -63,7 +63,7 @@ export androidImplPomfile=`pwd`/android-impl-pom.xml
 
 function copyResources {
 	resourcesFolder=$1
-	echo "Copying resources files to android"
+	echo "Copying resources files to $resourcesFolder"
 	cp -r $droidOutFolder/target/common/obj/JAVA_LIBRARIES/android_stubs_current_intermediates/classes/res $resourcesFolder
 	rm -rf $resourcesFolder/res/raw-ar
 	rm -rf $resourcesFolder/res/raw-da
@@ -161,6 +161,11 @@ cp -r $droidFolder/frameworks/base/location/java/* $androidImplSrcFolder/
 cp -r $droidOutFolder/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/core/java/* $androidImplSrcFolder/
 cp -r $droidFolder/dalvik/libcore/dalvik/src/main/java/org $androidImplSrcFolder/
 cp -r $droidFolder/dalvik/libcore/dalvik/src/main/java/dalvik $androidImplSrcFolder/
+# com.ibm.icu4jni.util
+cp -r $droidFolder/dalvik/libcore/icu/src/main/java/com $androidImplSrcFolder/
+cp -r $droidFolder/dalvik/libcore/luni-kernel/src/main/java/* $androidImplSrcFolder/
+# java.text
+cp -r $droidFolder/dalvik/libcore/text/src/main/java/* $androidImplSrcFolder/
 cp -r $droidFolder/dalvik/libcore/x-net/src/main/java/org $androidImplSrcFolder/
 cp -r $droidFolder/dalvik/libcore/xml/src/main/java/org/apache $androidImplSrcFolder/org/
 cp -r $droidFolder/dalvik/libcore/xml/src/main/java/org/kxml2 $androidImplSrcFolder/org/
@@ -168,8 +173,8 @@ cp -r $droidFolder/dalvik/libcore/xml/src/main/java/org/kxml2 $androidImplSrcFol
 cp -r $droidFolder/dalvik/libcore/xml/src/main/java/org/w3c $androidImplSrcFolder/org/
 cp -r $droidFolder/dalvik/libcore/luni/src/main/java/org $androidImplSrcFolder/
 # Patched version of Java API classes 
-mkdir -p $androidImplSrcFolder/java
-cp -r $droidFolder/dalvik/libcore/luni/src/main/java/java/net $androidImplSrcFolder/java
+cp -r $droidFolder/dalvik/libcore/luni/src/main/java/java $androidImplSrcFolder/
+cp -r $droidFolder/dalvik/libcore/nio/src/main/java/* $androidImplSrcFolder/
 
 mkdir -p $androidImplSrcFolder/com/android/internal
 cp -r $droidFolder/out/target/common/R/com/android/internal/R.java $androidImplSrcFolder/com/android/internal
@@ -214,17 +219,17 @@ cp $khronosPomFile $khronosProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$pomVersion/" $khronosProjectFolder/pom.xml
 
 
-cd $junitProjectFolder
-mvn clean install
+#cd $junitProjectFolder
+#mvn clean install
 
-cd $khronosProjectFolder
-mvn clean install
+#cd $khronosProjectFolder
+#mvn clean install
 
-cd $androidProjectFolder
-mvn clean install
+#cd $androidProjectFolder
+#mvn clean install
 
-cd $androidTestProjectFolder
-mvn clean install
+#cd $androidTestProjectFolder
+#mvn clean install
 
 cd $androidImplProjectFolder
 mvn clean install
