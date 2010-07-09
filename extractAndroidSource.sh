@@ -149,6 +149,7 @@ cp -r $droidSrcFolder/javax/microedition $khronosSrcFolder/javax
 cp -r $droidFolder/frameworks/base/core/java/* $androidImplSrcFolder/
 rm -rf $androidImplSrcFolder/com/android/os
 cp -r $droidFolder/frameworks/base/core/config/sdk/* $androidImplSrcFolder/
+#cp -r $droidFolder/frameworks/base/core/java/android $androidImplSrcFolder/
 cp -r $droidFolder/frameworks/base/graphics/java/* $androidImplSrcFolder/
 cp -r $droidFolder/frameworks/base/keystore/java/* $androidImplSrcFolder/
 cp -r $droidFolder/frameworks/base/location/java/* $androidImplSrcFolder/
@@ -157,6 +158,11 @@ cp -r $droidFolder/frameworks/base/sax/java/* $androidImplSrcFolder/
 cp -r $droidFolder/frameworks/base/telephony/java/* $androidImplSrcFolder/
 cp -r $droidFolder/frameworks/base/wifi/java/* $androidImplSrcFolder/
 cp -r $droidFolder/frameworks/base/location/java/* $androidImplSrcFolder/
+cp -r $droidFolder/frameworks/ex/common/java/* $androidImplSrcFolder/
+
+cp -r $droidFolder/packages/apps/QuickSearchBox/src/* $androidImplSrcFolder/
+cp $droidFolder/out/target/common/R/com/android/quicksearchbox/R.java $androidImplSrcFolder/com/android/quicksearchbox
+
 
 cp -r $droidOutFolder/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/core/java/* $androidImplSrcFolder/
 cp -r $droidFolder/dalvik/libcore/dalvik/src/main/java/org $androidImplSrcFolder/
@@ -183,7 +189,7 @@ cp -r $droidFolder/out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/
 cp -r $droidFolder/out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/location/java/* $androidImplSrcFolder/
 cp -r $droidFolder/out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/media/java/* $androidImplSrcFolder/
 cp -r $droidFolder/out/target/common/obj/JAVA_LIBRARIES/framework_intermediates/src/wifi/java/* $androidImplSrcFolder/
-
+cp -r $droidFolder/out/target/common/obj/APPS/QuickSearchBox_intermediates/src/src/* $androidImplSrcFolder/
 cp -r $droidFolder/out/target/common/obj/APPS/framework-res_intermediates/src/android $androidImplSrcFolder/
 
 # This is org.apache.harmony and org.bouncycastle which appear to be patched versions of the same
@@ -193,6 +199,11 @@ cp -r $droidFolder/dalvik/libcore/security/src/main/java/org $androidImplSrcFold
 cp -r $droidFolder/external/apache-http/src/org $androidImplSrcFolder/
 
 cp -r $droidFolder/external/gdata/src/* $androidImplSrcFolder/
+
+cp -r $droidFolder/external/guava/src/* $androidImplSrcFolder/
+
+# This is javax.annotation
+cp -r $droidFolder/external/jsr305/ri/src/main/java/* $androidImplSrcFolder/
 
 find $androidImplSrcFolder -name "*.aidl" | xargs rm 
 find $androidImplSrcFolder -name "*.P" | xargs rm 
