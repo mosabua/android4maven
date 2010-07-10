@@ -17,8 +17,14 @@
 #export platform=android-6
  
 # android-7
-export branchtag=android-2.1_r2
-export platform=android-7
+#export branchtag=android-2.1_r2
+#export platform=android-7
+
+# android-8
+export pomVersion=2.2_r1.1
+export platform=android-8
+
+export branchtag=android-$pomVersion
 
 sdkJar=/opt/android-sdk-linux_86/platforms/$platform/android.jar
 sdkJarContents=$sdkJar.extracted
@@ -32,10 +38,27 @@ if [ ! -d "$sdkJarContents" ]; then
 fi
 
 rm -rf /tmp/android.jar.extracted
+rm -rf /tmp/android-impl.jar.extracted
+
 mkdir  /tmp/android.jar.extracted
-cp ./target/android-$branchtag/target/$branchtag.jar /tmp/android.jar
+mkdir  /tmp/android-impl.jar.extracted
+
+cp ./target-$pomVersion/android-$branchtag/target/android-$pomVersion.jar /tmp/android.jar
+cp ./target-$pomVersion/android-impl-$branchtag/target/android-impl-$pomVersion.jar /tmp/android-impl.jar
+
 cd  /tmp/android.jar.extracted
 jar -xvf /tmp/android.jar
 
-diff -r $sdkJarContents /tmp/android.jar.extracted | grep -v .png > /tmp/diffs.lst
-gedit /tmp/diffs.lst &
+cd  /tmp/android-impl.jar.extracted
+jar -xvf /tmp/android-impl.jar
+
+
+diff -r $sdkJarContents /tmp/android.jar.extracted | grep -v .png > /tmp/sdk-diffs.lst
+diff -r $sdkJarContents /tmp/android-impl.jar.extracted | grep -v .png > /tmp/impl-diffs.lst
+
+gedit /tmp/sdk-diffs.lst &
+gedit /tmp/impl-diffs.lst &
+
+
+
+

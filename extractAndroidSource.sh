@@ -16,7 +16,7 @@
 #    android-4 : 1.6_r2
 #    android-6 : 2.0.1_r1
 #    android-7 : 2.1_r1
-export pomVersion=2.2
+export pomVersion=2.2_r1.1
 
 # Where was the android repo created and sync'd
 export droidFolder=/home/manningr/mydroid-$pomVersion
@@ -124,7 +124,7 @@ fi;
 
 
 
-echo "Copying source files from $androidSrcFolder"
+echo "Copying source files to $androidSrcFolder"
 cp -r $droidSrcFolder/android $androidSrcFolder
 rm -rf $androidSrcFolder/android/test
 cp -r $droidSrcFolder/android/test $androidTestSrcFolder/android
@@ -148,6 +148,7 @@ cp -r $droidSrcFolder/javax/microedition $khronosSrcFolder/javax
 # Android Impl (For now, just trying to get a build that compiles - there are many 3rd-party sources being included)
 cp -r $droidFolder/frameworks/base/core/java/* $androidImplSrcFolder/
 rm -rf $androidImplSrcFolder/com/android/os
+cp -r $droidFolder/frameworks/base/common/java/* $androidImplSrcFolder/
 cp -r $droidFolder/frameworks/base/core/config/sdk/* $androidImplSrcFolder/
 #cp -r $droidFolder/frameworks/base/core/java/android $androidImplSrcFolder/
 cp -r $droidFolder/frameworks/base/graphics/java/* $androidImplSrcFolder/
@@ -230,17 +231,17 @@ cp $khronosPomFile $khronosProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$pomVersion/" $khronosProjectFolder/pom.xml
 
 
-#cd $junitProjectFolder
-#mvn clean install
+cd $junitProjectFolder
+mvn clean install
 
-#cd $khronosProjectFolder
-#mvn clean install
+cd $khronosProjectFolder
+mvn clean install
 
-#cd $androidProjectFolder
-#mvn clean install
+cd $androidProjectFolder
+mvn clean install
 
-#cd $androidTestProjectFolder
-#mvn clean install
+cd $androidTestProjectFolder
+mvn clean install
 
 cd $androidImplProjectFolder
 mvn clean install
