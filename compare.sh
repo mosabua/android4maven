@@ -21,10 +21,11 @@
 #export platform=android-7
 
 # android-8
-export pomVersion=2.2_r1.1
-export platform=android-8
+export pomVersion=2.1.2
+export branchtag=android-2.1_r2
+export platform=android-7
 
-export branchtag=android-$pomVersion
+
 
 sdkJar=/opt/android-sdk-linux_86/platforms/$platform/android.jar
 sdkJarContents=$sdkJar.extracted

@@ -6,7 +6,10 @@
 	<version>@VERSION@</version>
 	<packaging>jar</packaging>
 	<name>Google Android Library</name>
-	<description>A library jar that provides APIs for Applications written for the Google Android Platform.</description>
+	<description>
+		A library jar that provides APIs for Applications written for the Google Android Platform.  The branch tag
+                that was used to checkout the source from the Git repos was @BRANCH_TAG@.
+        </description>
 	<url>http://source.android.com/</url>
 	<inceptionYear>2008</inceptionYear>	
 	<licenses>
@@ -30,6 +33,10 @@
 			<name>The Android Open Source Projects</name>
 		</developer>
 	</developers>
+
+	<properties>
+		<branch.tag>@BRANCH_TAG@</branch.tag>
+	</properties>
 
 	<build>
 		<plugins>

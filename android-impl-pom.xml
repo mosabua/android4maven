@@ -6,7 +6,12 @@
 	<version>@VERSION@</version>
 	<packaging>jar</packaging>
 	<name>Google Android Library (Implementation)</name>
-	<description>A library jar that provides APIs for Applications written for the Google Android Platform.  This artifact differs from the other "android" artifact in that it provides the implementations, rather than creating a replica of the Android SDK jar which just has stubbed methods. </description>
+	<description>
+		A library jar that provides APIs for Applications written for the Google Android Platform.  This artifact differs 
+		from the other "android" artifact in that it provides the implementations, rather than creating a replica of the 
+		Android SDK jar which just has stubbed methods. The branch tag that was used to checkout the source from the Git 
+		repos was @BRANCH_TAG@.
+	</description>
 	<url>http://source.android.com/</url>
 	<inceptionYear>2008</inceptionYear>	
 	<licenses>
@@ -30,6 +35,10 @@
 			<name>The Android Open Source Projects</name>
 		</developer>
 	</developers>
+
+	<properties>
+		<branch.tag>@BRANCH_TAG@</branch.tag>
+	</properties>
 
 	<build>
 		<plugins>
