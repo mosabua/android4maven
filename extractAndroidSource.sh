@@ -9,19 +9,36 @@
 #
 
 
-# This is the only version that needs to be manually set, based on the tag that was used during git sync
-# The key tags by platform (see source.properties in the Android SDK) are:
+# The branch version should be set to the tag that was used during git sync.
+# This will be used in the description and a property called "branchTag" to 
+# convey this information, since the pom version is being normalized to help
+# maven.  The key tags by platform (see source.properties in the Android SDK) 
+# are:
 #
 #    android-3 : 1.5_r4
 #    android-4 : 1.6_r2
 #    android-6 : 2.0.1_r1
 #    android-7 : 2.1_r1
-export pomVersion=2.2_r1.1
+export branchVersion=2.1_r2
+
+# The POM version should be set according to this convention:
+# It will either be 3 digits or 4 digits separated by periods.
+# 3 digits are used to indicate the first three digits of the 
+# Google version.  For example:
+#
+#  Branch    POM Version
+#  ------    -----------
+#
+#  2.1_r1      2.1.1
+#  2.2_r1.1    2.2.1 (some loss of precision)
+#  2.2_r1.2    2.2.1.2 (we have to append another digit to make the version unique)
+export pomVersion=2.1.2
+
 
 # Where was the android repo created and sync'd
-export droidFolder=/home/manningr/mydroid-$pomVersion
+export droidFolder=/home/manningr/mydroid-$branchVersion
 
-export branchVersion=$pomVersion
+
 export isOneDotFive=`echo pomVersion | grep 1.5 | wc -l`
 
 # Google is a bit inconsistent with their git repo tags, so here we remove the "_", but 
@@ -123,6 +140,10 @@ else
 fi;
 
 
+if [ ! -d "$droidSrcFolder" -a  "$1" = "-skipCompile" ]; then
+    echo "Android source folder doesn't exist.  Android SDK may need to be compiled."
+    exit 1
+fi
 
 echo "Copying source files to $androidSrcFolder"
 cp -r $droidSrcFolder/android $androidSrcFolder
@@ -216,13 +237,14 @@ copyResources $androidImplResourcesFolder
 echo "Copying in pom files ($androidPomfile and $junitPomFile)"
 cp $androidPomfile $androidProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$pomVersion/" $androidProjectFolder/pom.xml
+perl -pi -e "s/\@BRANCH_TAG\@/$branchtag/" $androidProjectFolder/pom.xml
 
 cp $androidTestPomFile $androidTestProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$pomVersion/" $androidTestProjectFolder/pom.xml
 
 cp $androidImplPomfile $androidImplProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$pomVersion/" $androidImplProjectFolder/pom.xml
-
+perl -pi -e "s/\@BRANCH_TAG\@/$branchtag/" $androidImplProjectFolder/pom.xml
 
 cp $junitPomFile $junitProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$pomVersion/" $junitProjectFolder/pom.xml
@@ -230,6 +252,8 @@ perl -pi -e "s/\@VERSION\@/$pomVersion/" $junitProjectFolder/pom.xml
 cp $khronosPomFile $khronosProjectFolder/pom.xml
 perl -pi -e "s/\@VERSION\@/$pomVersion/" $khronosProjectFolder/pom.xml
 
+
+export MAVEN_OPTS=-Xmx512m
 
 cd $junitProjectFolder
 mvn clean install
