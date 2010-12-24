@@ -5,6 +5,13 @@
 	<artifactId>opengl-api</artifactId>
 	<version>gl1.1-@VERSION@</version>
 	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>5</version>
+	</parent>
+
 	<name>Google Android Java ME Library (Khronos)</name>
 	<description>The Android implementation of Khronos OpenGL Spec for the Google Android SDK.</description>
 	<url>http://source.android.com/</url>
@@ -31,18 +38,24 @@
 		</developer>
 	</developers>
 
+	<properties> 
+		<release.name>@RELEASENAME@</release.name>
+		<platform>@PLATFORM@</platform>
+		<branch.tag>@BRANCHTAG@</branch.tag>
+	</properties> 
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.3.2</version>
 				<configuration>
-					<compilerVersion>1.5</compilerVersion>
+					<source>1.5</source>
+					<target>1.5</target>
 				</configuration>
 			</plugin>
 		</plugins>
-
 	</build>
 
 </project>

@@ -21,11 +21,12 @@
 #export platform=android-7
 
 # android-8
-export pomVersion=2.1.2
-export branchtag=android-2.1_r2
-export platform=android-7
+#export pomVersion=2.2_r1.1
+#export platform=android-8
 
-
+# android-9
+export pomVersion=2.3.1
+export platform=android-9
 
 sdkJar=/opt/android-sdk-linux_86/platforms/$platform/android.jar
 sdkJarContents=$sdkJar.extracted
@@ -44,14 +45,14 @@ rm -rf /tmp/android-impl.jar.extracted
 mkdir  /tmp/android.jar.extracted
 mkdir  /tmp/android-impl.jar.extracted
 
-cp ./target-$pomVersion/android-$branchtag/target/android-$pomVersion.jar /tmp/android.jar
-cp ./target-$pomVersion/android-impl-$branchtag/target/android-impl-$pomVersion.jar /tmp/android-impl.jar
+cp ./target-$pomVersion/android-$pomVersion/target/android-$pomVersion.jar /tmp/android.jar
+cp ./target-$pomVersion/android-impl-$pomVersion/target/android-impl-$pomVersion.jar /tmp/android-impl.jar
 
 cd  /tmp/android.jar.extracted
-jar -xvf /tmp/android.jar
+jar -xf /tmp/android.jar
 
 cd  /tmp/android-impl.jar.extracted
-jar -xvf /tmp/android-impl.jar
+jar -xf /tmp/android-impl.jar
 
 
 diff -r $sdkJarContents /tmp/android.jar.extracted | grep -v .png > /tmp/sdk-diffs.lst
