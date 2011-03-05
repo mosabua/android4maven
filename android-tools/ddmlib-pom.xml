@@ -1,0 +1,78 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.google.android.tools</groupId>
+	<artifactId>ddmlib</artifactId>
+	<version>@VERSION@</version>
+	<packaging>jar</packaging>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>5</version>
+	</parent>
+
+	<name>Google Android Tools ddmlib</name>
+	<description>A ddmlib jar that provides APIs for talking with Dalvik VM (both on Android phones and emulators).</description>
+	<url>http://tools.android.com/</url>
+	<inceptionYear>2008</inceptionYear>
+	<licenses>
+		<license>
+			<name>Apache 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+			<comments>
+				While the EULA for the Android SDK restricts distribution of those binaries, the source code
+				is licensed under Apache 2.0 which allows compiling binaries from source and then distributing
+				those versions.
+			</comments>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+		<url>https://android.git.kernel.org/</url>
+		<connection>git://android.git.kernel.org/platform/manifest.git</connection>
+	</scm>
+	<developers>
+		<developer>
+			<name>The Android Open Source Projects</name>
+		</developer>
+	</developers>
+
+	<!-- Since SDK Tools aren't properly tagged in git, these artifacts were built from the tip of a specific branch
+	     in particular point in time. This is the information about which specific branch and commit it was. -->
+	<properties>
+		<branch>@GIT_BRANCH@</branch>
+		<commit>@GIT_COMMIT@</commit>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+		</plugins>
+
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.2</version> <!-- see external/junit/version -->
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>2.5.2</version> <!-- see git log of external/easymock -->
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
