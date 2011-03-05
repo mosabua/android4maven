@@ -25,8 +25,13 @@
 #export platform=android-8
 
 # android-9
-export pomVersion=2.3.1
-export platform=android-9
+#export pomVersion=2.3.1
+#export platform=android-9
+
+# android-10
+export pomVersion=2.3.3
+export platform=android-10
+
 
 sdkJar=/opt/android-sdk-linux_86/platforms/$platform/android.jar
 sdkJarContents=$sdkJar.extracted
